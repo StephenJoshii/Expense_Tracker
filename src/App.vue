@@ -1,14 +1,21 @@
 <template>
-  <Header />
-  <div class="container">
-    <Balance :total="total" />
-    <IncomeExpenses :income="+income" :expenses="+expenses" />
-    <TransactionList
-      :transactions="transactions"
-      @transactionDeleted="handleTransactionDeleted"
-    />
-    <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
+  <div v-if="user">
+    <button id="logout-button" @click="logout" class="btn">Logout</button>
+    <Header />
+    <div class="container">
+      <Balance :total="total" />
+      <IncomeExpenses :income="+income" :expenses="+expenses" />
+      <TransactionList
+        :transactions="transactions"
+        @transactionDeleted="handleTransactionDeleted"
+      />
+      <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
+    </div>
+    <div class="chatbot-container">
+      <Chatbot />
+    </div>
   </div>
+  <router-view v-else></router-view>
 </template>
 
 <script setup>
@@ -17,31 +24,47 @@ import Balance from './components/Balance.vue';
 import IncomeExpenses from './components/IncomeExpenses.vue';
 import TransactionList from './components/TransactionList.vue';
 import AddTransaction from './components/AddTransaction.vue';
+import Chatbot from './components/Chatbot.vue'; 
 import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
+import { auth } from './firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useRouter } from 'vue-router';
 
 const toast = useToast();
 
 const transactions = ref([]);
+const user = ref(null);
+const router = useRouter();
 
-// Fetch transactions from the backend
-onMounted(async () => {
+const fetchTransactions = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/transactions');
+    const response = await axios.get('http://localhost:3000/transactions', {
+      headers: {
+        authorization: auth.currentUser.uid,
+      },
+    });
     transactions.value = response.data;
   } catch (error) {
     toast.error('Failed to fetch transactions');
     console.error(error);
   }
+};
+
+onMounted(() => {
+  onAuthStateChanged(auth, (authUser) => {
+    user.value = authUser;
+    if (authUser) {
+      fetchTransactions();
+    }
+  });
 });
 
-// Get total
 const total = computed(() => {
   return transactions.value.reduce((acc, transaction) => acc + transaction.amount, 0);
 });
 
-// Get income
 const income = computed(() => {
   return transactions.value
     .filter(transaction => transaction.amount > 0)
@@ -49,7 +72,6 @@ const income = computed(() => {
     .toFixed(2);
 });
 
-// Get expenses
 const expenses = computed(() => {
   return transactions.value
     .filter(transaction => transaction.amount < 0)
@@ -57,15 +79,21 @@ const expenses = computed(() => {
     .toFixed(2);
 });
 
-// Handle submitting a new transaction
 const handleTransactionSubmitted = async (transactionData) => {
   try {
-    const response = await axios.post('http://localhost:3000/transactions', {
-      text: transactionData.text,
-      amount: transactionData.amount,
-    });
-
-    transactions.value.push(response.data);
+    const response = await axios.post(
+      'http://localhost:3000/transactions',
+      {
+        text: transactionData.text,
+        amount: transactionData.amount,
+      },
+      {
+        headers: {
+          authorization: auth.currentUser.uid,
+        },
+      }
+    );
+    fetchTransactions();
     toast.success('Transaction added.');
   } catch (error) {
     toast.error('Failed to add transaction');
@@ -73,15 +101,28 @@ const handleTransactionSubmitted = async (transactionData) => {
   }
 };
 
-// Handle deleting a transaction
 const handleTransactionDeleted = async (id) => {
   try {
-    await axios.delete(`http://localhost:3000/transactions/${id}`);
-    transactions.value = transactions.value.filter((transaction) => transaction.id !== id);
+    await axios.delete(`http://localhost:3000/transactions/${id}`, {
+      headers: {
+        authorization: auth.currentUser.uid,
+      },
+    });
+    fetchTransactions();
     toast.success('Transaction deleted.');
   } catch (error) {
     toast.error('Failed to delete transaction');
     console.error(error);
+  }
+};
+
+const logout = async () => {
+  try {
+    await signOut(auth);
+    toast.success('Logout successful!');
+    router.push('/login');
+  } catch (error) {
+    toast.error(error.message);
   }
 };
 </script>
