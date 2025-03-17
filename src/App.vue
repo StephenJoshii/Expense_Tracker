@@ -4,15 +4,15 @@
     <Header />
     <div class="container">
       <Balance :total="total" />
+      <div class="chatbot-container">
+      <Chatbot />
+    </div>
       <IncomeExpenses :income="+income" :expenses="+expenses" />
       <TransactionList
         :transactions="transactions"
         @transactionDeleted="handleTransactionDeleted"
       />
       <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
-    </div>
-    <div class="chatbot-container">
-      <Chatbot />
     </div>
   </div>
   <router-view v-else></router-view>
@@ -21,10 +21,10 @@
 <script setup>
 import Header from './components/Header.vue';
 import Balance from './components/Balance.vue';
+import Chatbot from './components/Chatbot.vue'; 
 import IncomeExpenses from './components/IncomeExpenses.vue';
 import TransactionList from './components/TransactionList.vue';
 import AddTransaction from './components/AddTransaction.vue';
-import Chatbot from './components/Chatbot.vue'; 
 import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';

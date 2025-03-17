@@ -14,12 +14,16 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MySQL database connection
+require('dotenv').config();
+
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'expense_tracker',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
+
+// ... your other code ...
 
 // Connect to MySQL database
 db.connect((err) => {
@@ -123,58 +127,42 @@ app.delete('/transactions/:id', (req, res) => {
   });
 });
 
+
+
 // 4. Chatbot Endpoint
-app.post('/chatbot', async (req, res) => {
+app.get('/api/quote', async (req, res) => {
   try {
-    const { question, userId } = req.body;
-    console.log('chatbot question:', question);
-    console.log('chatbot userId:', userId);
-
-    if (!question || !userId) {
-      return res.status(400).json({ error: 'Question and userId are required.' });
-    }
-
-    db.query('SELECT * FROM transactions WHERE userId = ?', [userId], async (err, results) => {
-      if (err) {
-        console.error('Chatbot - Database Error:', err);
-        return res.status(500).json({ error: 'Failed to fetch transaction data.' });
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a financial advisor. Generate a motivation quote by someone famous about finances/investing/making money, and make sure it is proper quote formatting.',
+          },
+          {
+            role: 'user',
+            content: 'Generate a quote.',
+          },
+        ],
+        max_tokens: 100,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.VUE_APP_CHATBOT_TOKEN}`,
+        },
       }
+    );
 
-      const transactionData = JSON.stringify(results);
-
-      const messages = [
-        {
-          role: 'system',
-          content: 'You are a financial advisor. Answer questions based on the users transaction data.',
-        },
-        {
-          role: 'user',
-          content: `Here is my transaction data: ${transactionData}. Question: ${question}`,
-        },
-      ];
-
-      const openAiResponse = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          model: 'gpt-3.5-turbo',
-          messages: messages,
-          max_tokens: 200,
-        },
-        {
-          headers: {
-            Authorization: `intestrightnow`,
-        },
-        }
-      );
-
-      const chatbotResponse = openAiResponse.data.choices[0].message.content.trim();
-      res.json({ response: chatbotResponse });
-    });
+    const quote = response.data.choices[0].message.content.trim();
+    res.json({ quote });
   } catch (error) {
-    console.error('Chatbot - OpenAI Error:', error);
-    res.status(500).json({ error: 'Failed to process request.' });
+    console.error('Quote API Error:', error);
+    res.status(500).json({ error: 'Failed to generate quote.' });
   }
 });
+
 
 // Start the server
 app.listen(port, () => {

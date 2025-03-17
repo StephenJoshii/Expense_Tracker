@@ -251,3 +251,52 @@ h2, h3, h4 {
   
 }
 
+/* Financial Insight Styles */
+.financial-insight {
+  padding: 15px;
+  text-align: center;
+  margin: 20px auto;
+  width: 90%;
+  height: 120px;
+  overflow: hidden;
+  position: relative;
+}
+
+.financial-insight .insight-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.financial-insight .insight-text {
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #eaeaea;
+  font-style: italic;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin-bottom: 10px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.financial-insight .insight-text.loading {
+  opacity: 0.5;
+}
+
+.financial-insight .generate-btn {
+  padding: 8px 15px;
+  background: #333;
+  border: none;
+  border-radius: 10px;
+  color: #4fd1c5;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.financial-insight .generate-btn:hover {
+  background: #444;
+}
+
