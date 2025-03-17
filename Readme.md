@@ -59,8 +59,8 @@ Before running the application, ensure you have the following installed:
 1. **Clone the Repository:**
 
     ```bash
-    git clone [repository URL]
-    cd [repository directory]
+    git clone https://github.com/StephenJoshii/Expense_Tracker.git
+    cd Expense_Tracker
     ```
 
 2. **Install Node Dependencies:**
@@ -71,22 +71,12 @@ Before running the application, ensure you have the following installed:
 
 ---
 
-## Database Setup
 
 This application uses MySQL as its database. The connection details are configured using environment variables.
 
-1. **Install MySQL Server:**
+ **Install MySQL Server:**
     * Install MySQL server on your local machine or use a cloud-based MySQL service.
 
-2. **Create Database:**
-    * Create a database named `expense_tracker`.
-
-3. **Firebase Setup:**
-    * Create a Firebase project on the Firebase console.
-    * Enable Email/Password authentication in Firebase Authentication.
-    * Obtain your Firebase Admin SDK credentials and integrate them into your backend code (if required).
-
----
 
 ## Configuration
 
@@ -101,7 +91,7 @@ This application uses MySQL as its database. The connection details are configur
 
     ```bash
     cd backend
-    node server.js # or your start command (e.g., npm run dev)
+    node server.js 
     ```
 
 2. **Start the Fronttend:**
