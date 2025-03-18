@@ -1,6 +1,6 @@
-# Expense Tracker API
+# Expense Tracker 
 
-**Expense Tracker API** is a robust backend API built with Node.js (Express) and MySQL. It enables users to efficiently manage their personal finances by providing CRUD operations for expense tracking, balance calculation, and secure user authentication.
+**Expense Tracker** is a robust app built with Node.js (Express), VUE and MySQL. It enables users to efficiently manage their personal finances by providing CRUD operations for expense tracking, balance calculation, and secure user authentication.
 
 [Expense Tracker API Demonstration](https://www.loom.com/share/c744359da30d48a4a92c5242dc35a99d?sid=22a11221-26bb-4a82-a80d-0ffba64d20a8)
 
