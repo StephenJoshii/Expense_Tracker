@@ -6,6 +6,10 @@
 
 ---
 
+https://github.com/user-attachments/assets/825c63a6-5927-4276-af7e-b3537d2f123a
+
+
+
 ## Table of Contents
 
 - [Features](#features)
@@ -98,4 +102,3 @@ This application uses MySQL as its database. The connection details are configur
     ```bash
     npm run dev
 
-## Folder Structure
