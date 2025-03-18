@@ -2,11 +2,11 @@
 
 **Expense Tracker** is a robust app built with Node.js (Express), VUE and MySQL. It enables users to efficiently manage their personal finances by providing CRUD operations for expense tracking, balance calculation, and secure user authentication.
 
-[Expense Tracker API Demonstration](https://www.loom.com/share/c744359da30d48a4a92c5242dc35a99d?sid=22a11221-26bb-4a82-a80d-0ffba64d20a8)
+[Expense Tracker API Demonstration](https://github.com/user-attachments/assets/825c63a6-5927-4276-af7e-b3537d2f123a)
 
 ---
 
-https://github.com/user-attachments/assets/825c63a6-5927-4276-af7e-b3537d2f123a
+
 
 
 
@@ -18,8 +18,8 @@ https://github.com/user-attachments/assets/825c63a6-5927-4276-af7e-b3537d2f123a
 - [Installation](#installation)
 - [Database Setup](#database-setup)
 - [Configuration](#configuration)
-- [Folder Structure](#folder-structure)
 - [Running the Application](#running-the-application)
+- [Dependencies](#dependencies)
 
 ---
 
@@ -102,3 +102,42 @@ This application uses MySQL as its database. The connection details are configur
     ```bash
     npm run dev
 
+## Dependencies
+
+## Backend Dependencies (Node.js/Express)
+
+* **Express:** A fast, unopinionated, minimalist web framework for Node.js.
+    ```bash
+    npm install express
+    ```
+* **MySQL2:** A fast MySQL client for Node.js.
+    ```bash
+    npm install mysql2
+    ```
+* **Firebase Admin:** The Firebase Admin Node.js SDK enables you to interact with Firebase from privileged environments.
+    ```bash
+    npm install firebase-admin
+    ```
+* **dotenv:** Loads environment variables from a `.env` file into `process.env`.
+    ```bash
+    npm install dotenv
+    ```
+* **Axios:** Promise based HTTP client for the browser and node.js (Used for testing api endpoints).
+    ```bash
+    npm install axios
+    ```
+
+## Frontend Dependencies (Vue.js - Optional, for basic testing)
+
+* **Vue.js:** The progressive JavaScript framework for building user interfaces.
+    ```bash
+    npm install vue
+    ```
+* **Axios:** Promise based HTTP client for the browser and node.js.
+    ```bash
+    npm install axios
+    ```
+* **Firebase:** JavaScript SDK for Firebase services.
+    ```bash
+    npm install firebase
+    ```
